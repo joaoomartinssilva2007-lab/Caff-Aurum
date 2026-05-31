@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terra Marcenaria — Móveis Planejados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --wood-dark: #3B2510;
+    --wood-mid: #6B3F1E;
+    --wood-light: #A0622A;
+    --wood-warm: #C48642;
+    --cream: #F5ECD7;
+    --cream-dark: #E8D5B0;
+    --sand: #D4B896;
+    --charcoal: #1C1410;
+    --text-body: #4A3728;
+    --gold: #C9963A;
+    --white-warm: #FBF6EE;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--white-warm);
+    color: var(--text-body);
+    overflow-x: hidden;
+  }
+
+  /* ===== GRAIN OVERLAY ===== */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ===== NAVBAR ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 1.2rem 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.4s ease;
+  }
+
+  nav.scrolled {
+    background: rgba(27, 16, 8, 0.96);
+    backdrop-filter: blur(12px);
+    padding: 0.9rem 5%;
+    box-shadow: 0 2px 30px rgba(0,0,0,0.3);
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--cream);
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .nav-logo span {
+    display: inline-block;
+    width: 28px; height: 28px;
+    background: var(--gold);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--cream);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+  }
+
+  .nav-links a:hover { opacity: 1; }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    background: var(--gold);
+    color: var(--charcoal) !important;
+    padding: 0.55rem 1.4rem;
+    border-radius: 2px;
+    font-weight: 500 !important;
+    opacity: 1 !important;
+    transition: background 0.2s, transform 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--wood-warm) !important; transform: translateY(-1px); }
+  .nav-cta::after { display: none !important; }
+
+  /* Hamburger */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span {
+    width: 26px; height: 2px;
+    background: var(--cream);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+
+  /* ===== HERO ===== */
+  #hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: var(--wood-dark);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 50%, rgba(106,63,30,0.6) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 80% at 20% 80%, rgba(192,134,66,0.15) 0%, transparent 60%),
+      linear-gradient(135deg, #1C0E05 0%, #3B2510 40%, #6B3F1E 100%);
+  }
+
+  /* Wood grain lines */
+  .hero-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      92deg,
+      transparent 0px,
+      transparent 18px,
+      rgba(255,255,255,0.012) 18px,
+      rgba(255,255,255,0.012) 20px
+    );
+  }
+
+  .hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      88deg,
+      transparent 0px,
+      transparent 35px,
+      rgba(192,134,66,0.06) 35px,
+      rgba(192,134,66,0.06) 37px
+    );
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 5%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    padding-top: 5rem;
+  }
+
+  .hero-label {
+    font-size: 0.78rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-label::before {
+    content: '';
+    width: 40px; height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    color: var(--cream);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.4s forwards;
+  }
+
+  .hero-title em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .hero-desc {
+    color: var(--sand);
+    font-size: 1.05rem;
+    line-height: 1.75;
+    font-weight: 300;
+    max-width: 500px;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.6s forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.8s forwards;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--charcoal);
+    padding: 1rem 2.2rem;
+    border: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.15);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,150,58,0.35); }
+  .btn-primary:hover::before { transform: translateX(0); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--cream);
+    padding: 1rem 2.2rem;
+    border: 1px solid rgba(245,236,215,0.3);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+  /* Hero visual right */
+  .hero-visual {
+    position: relative;
+    height: 520px;
+    opacity: 0;
+    animation: fadeIn 1.2s ease 0.6s forwards;
+  }
+
+  .hero-card {
+    position: absolute;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,150,58,0.2);
+    backdrop-filter: blur(8px);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .hero-card-main {
+    width: 340px; height: 420px;
+    top: 20px; right: 20px;
+    background: linear-gradient(135deg, rgba(106,63,30,0.5), rgba(59,37,16,0.8));
+    display: flex;
+    align-items: flex-end;
+    padding: 1.5rem;
+  }
+
+  .hero-card-main::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 8px,
+      rgba(201,150,58,0.04) 8px,
+      rgba(201,150,58,0.04) 10px
+    );
+  }
+
+  .hero-card-tag {
+    background: var(--gold);
+    color: var(--charcoal);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 2px;
+  }
+
+  .hero-card-sm {
+    width: 180px; height: 140px;
+    bottom: 30px; left: 0px;
+    padding: 1.2rem;
+    background: rgba(27,16,8,0.9);
+  }
+
+  .hero-card-sm .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+
+  .hero-card-sm .stat-label {
+    font-size: 0.75rem;
+    color: var(--sand);
+    letter-spacing: 0.05em;
+  }
+
+  /* Floating icon elements */
+  .float-el {
+    position: absolute;
+    width: 60px; height: 60px;
+    border: 1px solid rgba(201,150,58,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    background: rgba(27,16,8,0.6);
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .float-el:nth-child(2) { animation-delay: 1.5s; }
+  .float-el:nth-child(3) { animation-delay: 3s; }
+
+  .f1 { top: 60px; left: 30px; }
+  .f2 { top: 200px; left: 60px; }
+
+  /* Hero stats strip */
+  .hero-stats {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(27,16,8,0.7);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(201,150,58,0.15);
+    padding: 1.5rem 5%;
+    display: flex;
+    justify-content: center;
+    gap: 5rem;
+    z-index: 3;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.2s forwards;
+  }
+
+  .stat-item { text-align: center; }
+  .stat-item .n {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--gold);
+    display: block;
+  }
+  .stat-item .l {
+    font-size: 0.75rem;
+    color: var(--sand);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ===== SECTIONS ===== */
+  section { padding: 6rem 5%; }
+
+  .section-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .section-label::before { content: ''; width: 30px; height: 1px; background: var(--gold); }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    color: var(--wood-dark);
+    line-height: 1.2;
+    margin-bottom: 1.2rem;
+  }
+
+  .section-subtitle {
+    font-size: 1rem;
+    color: var(--text-body);
+    font-weight: 300;
+    line-height: 1.7;
+    max-width: 560px;
+    opacity: 0.75;
+  }
+
+  /* ===== SOBRE ===== */
+  #sobre {
+    background: var(--white-warm);
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .sobre-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .sobre-visual {
+    position: relative;
+  }
+
+  .sobre-img-frame {
+    width: 100%;
+    aspect-ratio: 4/5;
+    background: linear-gradient(135deg, #6B3F1E, #3B2510);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .sobre-img-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      92deg,
+      transparent 0px,
+      transparent 12px,
+      rgba(201,150,58,0.06) 12px,
+      rgba(201,150,58,0.06) 14px
+    ),
+    repeating-linear-gradient(
+      2deg,
+      transparent 0px,
+      transparent 25px,
+      rgba(255,255,255,0.02) 25px,
+      rgba(255,255,255,0.02) 27px
+    );
+  }
+
+  .sobre-img-frame .wood-icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6rem;
+    opacity: 0.15;
+  }
+
+  .sobre-badge {
+    position: absolute;
+    bottom: -20px; right: -20px;
+    width: 120px; height: 120px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 30px rgba(201,150,58,0.4);
+  }
+
+  .sobre-badge .n {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--charcoal);
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .sobre-badge .l {
+    font-size: 0.65rem;
+    color: var(--charcoal);
+    letter-spacing: 0.05em;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .sobre-content { }
+  .sobre-content .section-title { color: var(--wood-dark); }
+
+  .sobre-features {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .feature-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .feature-icon {
+    width: 44px; height: 44px;
+    min-width: 44px;
+    background: var(--cream-dark);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    border: 1px solid rgba(160,98,42,0.2);
+  }
+
+  .feature-text h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--wood-dark);
+    margin-bottom: 0.2rem;
+  }
+
+  .feature-text p {
+    font-size: 0.88rem;
+    color: var(--text-body);
+    opacity: 0.75;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  /* ===== SERVIÇOS ===== */
+  #servicos {
+    background: linear-gradient(160deg, var(--wood-dark) 0%, #2A1A0A 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #servicos::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 20px,
+      rgba(255,255,255,0.015) 20px,
+      rgba(255,255,255,0.015) 22px
+    );
+  }
+
+  .servicos-header {
+    max-width: 1300px;
+    margin: 0 auto 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .servicos-header .section-label,
+  .servicos-header .section-title { color: var(--cream); }
+  .servicos-header .section-label { color: var(--gold); }
+
+  .servicos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5px;
+    max-width: 1300px;
+    margin: 0 auto;
+    background: rgba(201,150,58,0.15);
+    border: 1px solid rgba(201,150,58,0.15);
+  }
+
+  .servico-card {
+    background: rgba(27,16,8,0.8);
+    padding: 2.5rem;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    overflow: hidden;
+  }
+
+  .servico-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 2px;
+    background: var(--gold);
+    transition: width 0.4s ease;
+  }
+
+  .servico-card:hover { background: rgba(59,37,16,0.9); }
+  .servico-card:hover::before { width: 100%; }
+
+  .servico-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: rgba(201,150,58,0.15);
+    position: absolute;
+    top: 1rem; right: 1.5rem;
+    line-height: 1;
+    transition: color 0.3s;
+  }
+
+  .servico-card:hover .servico-num { color: rgba(201,150,58,0.3); }
+
+  .servico-icon {
+    font-size: 2rem;
+    margin-bottom: 1.2rem;
+    display: block;
+  }
+
+  .servico-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--cream);
+    margin-bottom: 0.8rem;
+  }
+
+  .servico-card p {
+    font-size: 0.88rem;
+    color: var(--sand);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  .servico-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.2rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    transition: gap 0.2s;
+  }
+  .servico-link:hover { gap: 0.8rem; }
+
+  /* ===== PORTFÓLIO ===== */
+  #portfolio {
+    background: var(--cream);
+    padding: 6rem 5%;
+  }
+
+  .portfolio-header {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 3rem;
+  }
+
+  .portfolio-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    padding: 0.5rem 1.4rem;
+    border: 1px solid rgba(106,63,30,0.25);
+    background: transparent;
+    color: var(--text-body);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.25s;
+  }
+
+  .tab-btn.active, .tab-btn:hover {
+    background: var(--wood-dark);
+    color: var(--cream);
+    border-color: var(--wood-dark);
+  }
+
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto;
+    gap: 1rem;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .portfolio-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 3px;
+    cursor: pointer;
+    background: var(--wood-mid);
+    transition: transform 0.3s ease, box-shadow 0.3s;
+  }
+
+  .portfolio-item:first-child {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+
+  .portfolio-item:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(59,37,16,0.2); }
+
+  .portfolio-img {
+    width: 100%;
+    aspect-ratio: 16/10;
+    background: linear-gradient(135deg, var(--wood-mid), var(--wood-dark));
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    color: rgba(245,236,215,0.12);
+    transition: transform 0.4s ease;
+  }
+
+  .portfolio-item:first-child .portfolio-img { aspect-ratio: 16/9; }
+  .portfolio-item:hover .portfolio-img { transform: scale(1.04); }
+
+  .portfolio-img::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 6px,
+      rgba(201,150,58,0.04) 6px,
+      rgba(201,150,58,0.04) 8px
+    );
+  }
+
+  .portfolio-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(27,16,8,0.9) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: flex-end;
+    padding: 1.5rem;
+  }
+
+  .portfolio-item:hover .portfolio-overlay { opacity: 1; }
+
+  .portfolio-info h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--cream);
+    margin-bottom: 0.3rem;
+  }
+
+  .portfolio-info p {
+    font-size: 0.78rem;
+    color: var(--sand);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ===== ORÇAMENTO ===== */
+  #orcamento {
+    background: var(--white-warm);
+    padding: 6rem 5%;
+  }
+
+  .orcamento-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 5rem;
+    align-items: start;
+  }
+
+  .orcamento-info .section-title { color: var(--wood-dark); }
+
+  .process-steps {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .step {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    width: 40px; height: 40px;
+    min-width: 40px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    color: var(--gold);
+  }
+
+  .step-text h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--wood-dark);
+    margin-bottom: 0.2rem;
+  }
+
+  .step-text p {
+    font-size: 0.85rem;
+    color: var(--text-body);
+    opacity: 0.7;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  /* Form */
+  .orcamento-form {
+    background: var(--cream);
+    padding: 2.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(160,98,42,0.15);
+    box-shadow: 0 4px 40px rgba(59,37,16,0.08);
+  }
+
+  .form-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--wood-dark);
+    margin-bottom: 0.3rem;
+  }
+
+  .form-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-body);
+    opacity: 0.6;
+    margin-bottom: 2rem;
+    font-weight: 300;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--wood-mid);
+    font-weight: 500;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.85rem 1rem;
+    border: 1px solid rgba(160,98,42,0.25);
+    border-radius: 2px;
+    background: var(--white-warm);
+    color: var(--text-body);
+    font-family: 'Jost', sans-serif;
+    font-size: 0.9rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    appearance: none;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,150,58,0.12);
+  }
+
+  .form-group textarea { min-height: 90px; resize: vertical; }
+
+  .form-submit {
+    width: 100%;
+    padding: 1rem;
+    background: var(--wood-dark);
+    color: var(--cream);
+    border: none;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.25s, transform 0.2s;
+    margin-top: 0.5rem;
+  }
+  .form-submit:hover { background: var(--gold); color: var(--charcoal); transform: translateY(-1px); }
+
+  /* ===== DEPOIMENTOS ===== */
+  #depoimentos {
+    background: var(--cream-dark);
+    padding: 6rem 5%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dep-header {
+    text-align: center;
+    max-width: 500px;
+    margin: 0 auto 4rem;
+  }
+
+  .dep-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .dep-card {
+    background: var(--white-warm);
+    padding: 2rem;
+    border-radius: 4px;
+    position: relative;
+    border: 1px solid rgba(160,98,42,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .dep-card:hover { transform: translateY(-4px); box-shadow: 0 12px 35px rgba(59,37,16,0.1); }
+
+  .dep-stars { color: var(--gold); margin-bottom: 1rem; letter-spacing: 0.1em; font-size: 0.9rem; }
+
+  .dep-text {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    color: var(--text-body);
+    font-weight: 300;
+    margin-bottom: 1.5rem;
+    font-style: italic;
+  }
+
+  .dep-author {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .dep-avatar {
+    width: 42px; height: 42px;
+    background: linear-gradient(135deg, var(--wood-mid), var(--wood-light));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--cream);
+  }
+
+  .dep-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    color: var(--wood-dark);
+  }
+
+  .dep-role {
+    font-size: 0.75rem;
+    color: var(--text-body);
+    opacity: 0.55;
+  }
+
+  /* ===== CONTATO ===== */
+  #contato {
+    background: var(--wood-dark);
+    padding: 6rem 5%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #contato::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent 0px, transparent 18px,
+      rgba(255,255,255,0.012) 18px, rgba(255,255,255,0.012) 20px
+    );
+  }
+
+  .contato-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 6rem;
+    align-items: start;
+    position: relative;
+    z-index: 1;
+  }
+
+  .contato-content .section-label { color: var(--gold); }
+
+  .contato-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    color: var(--cream);
+    line-height: 1.2;
+    margin-bottom: 1.2rem;
+  }
+
+  .contato-desc {
+    color: var(--sand);
+    font-size: 1rem;
+    line-height: 1.7;
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+  }
+
+  .contato-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .contato-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .contato-item-icon {
+    width: 44px; height: 44px;
+    border: 1px solid rgba(201,150,58,0.3);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    min-width: 44px;
+  }
+
+  .contato-item-text .l {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.15rem;
+  }
+
+  .contato-item-text .v {
+    font-size: 0.95rem;
+    color: var(--cream);
+    font-weight: 300;
+  }
+
+  .contato-map {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,150,58,0.2);
+    border-radius: 4px;
+    height: 350px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contato-map::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 50% 50%, rgba(201,150,58,0.08) 0%, transparent 70%),
+      repeating-linear-gradient(0deg, transparent, transparent 25px, rgba(201,150,58,0.05) 25px, rgba(201,150,58,0.05) 26px),
+      repeating-linear-gradient(90deg, transparent, transparent 25px, rgba(201,150,58,0.05) 25px, rgba(201,150,58,0.05) 26px);
+  }
+
+  .map-pin {
+    font-size: 3rem;
+    animation: float 3s ease-in-out infinite;
+    position: relative;
+    z-index: 1;
+  }
+
+  .map-text {
+    color: var(--sand);
+    font-size: 0.9rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    font-weight: 300;
+    max-width: 200px;
+    line-height: 1.5;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--charcoal);
+    padding: 3rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-top: 1px solid rgba(201,150,58,0.1);
+  }
+
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--cream);
+    opacity: 0.7;
+  }
+
+  .footer-copy {
+    font-size: 0.8rem;
+    color: var(--sand);
+    opacity: 0.5;
+    font-weight: 300;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 0.8rem;
+    color: var(--sand);
+    text-decoration: none;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  .footer-links a:hover { opacity: 1; }
+
+  /* ===== MOBILE NAV ===== */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(27,16,8,0.98);
+    z-index: 999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--cream);
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.2s, color 0.2s;
+  }
+  .mobile-menu a:hover { opacity: 1; color: var(--gold); }
+  .close-menu {
+    position: absolute;
+    top: 1.5rem; right: 5%;
+    background: none; border: none;
+    color: var(--cream); font-size: 1.5rem; cursor: pointer;
+  }
+
+  /* ===== SCROLL REVEAL ===== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* ===== WHATSAPP FLOAT ===== */
+  .whatsapp-btn {
+    position: fixed;
+    bottom: 2rem; right: 2rem;
+    width: 56px; height: 56px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+    z-index: 500;
+    transition: transform 0.3s, box-shadow 0.3s;
+    animation: fadeIn 1s ease 2s both;
+  }
+  .whatsapp-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.5); }
+  .whatsapp-btn svg { width: 28px; fill: white; }
+
+  /* ===== RESPONSIVO ===== */
+  @media (max-width: 1024px) {
+    .servicos-grid { grid-template-columns: repeat(2, 1fr); }
+    .dep-grid { grid-template-columns: repeat(2, 1fr); }
+    .sobre-grid, .orcamento-wrapper, .contato-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .sobre-visual { max-width: 400px; }
+    .hero-content { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .servicos-grid { grid-template-columns: 1fr; }
+    .dep-grid { grid-template-columns: 1fr; }
+    .portfolio-grid { grid-template-columns: 1fr; }
+    .portfolio-item:first-child { grid-column: span 1; }
+    .hero-stats { gap: 2rem; flex-wrap: wrap; }
+    .form-row { grid-template-columns: 1fr; }
+    footer { flex-direction: column; text-align: center; }
+    .servicos-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    section { padding: 4rem 5%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <span></span>
+    Terra Marcenaria
+  </a>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#portfolio">Portfólio</a></li>
+    <li><a href="#depoimentos">Clientes</a></li>
+    <li><a href="#orcamento" class="nav-cta">Solicitar Orçamento</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="close-menu" onclick="toggleMenu()">✕</button>
+  <a href="#sobre" onclick="toggleMenu()">Sobre</a>
+  <a href="#servicos" onclick="toggleMenu()">Serviços</a>
+  <a href="#portfolio" onclick="toggleMenu()">Portfólio</a>
+  <a href="#depoimentos" onclick="toggleMenu()">Clientes</a>
+  <a href="#orcamento" onclick="toggleMenu()">Orçamento</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-label">Móveis Planejados Premium</div>
+      <h1 class="hero-title">
+        Arte em madeira,<br>
+        <em>feita para durar</em>
+      </h1>
+      <p class="hero-desc">
+        Transformamos sua visão em ambientes únicos. Cada peça é criada com madeiras selecionadas, técnicas artesanais e acabamento de alto padrão.
+      </p>
+      <div class="hero-actions">
+        <a href="#orcamento" class="btn-primary">Solicitar Orçamento</a>
+        <a href="#portfolio" class="btn-outline">Ver Portfólio</a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="float-el f1">🪵</div>
+      <div class="float-el f2">📐</div>
+      <div class="hero-card hero-card-main">
+        <div class="hero-card-tag">Projeto Exclusivo</div>
+      </div>
+      <div class="hero-card hero-card-sm">
+        <div class="stat-num">98%</div>
+        <div class="stat-label">Clientes satisfeitos</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <span class="n">+15</span>
+      <span class="l">Anos de experiência</span>
+    </div>
+    <div class="stat-item">
+      <span class="n">+850</span>
+      <span class="l">Projetos entregues</span>
+    </div>
+    <div class="stat-item">
+      <span class="n">+300</span>
+      <span class="l">Clientes fidelizados</span>
+    </div>
+    <div class="stat-item">
+      <span class="n">5★</span>
+      <span class="l">Avaliação média</span>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre" style="padding:7rem 5%;">
+  <div class="sobre-grid">
+    <div class="sobre-visual reveal">
+      <div class="sobre-img-frame">
+        <div class="wood-icon">🏛️</div>
+      </div>
+      <div class="sobre-badge">
+        <span class="n">15</span>
+        <span class="l">anos no mercado</span>
+      </div>
+    </div>
+    <div class="sobre-content">
+      <div class="section-label reveal">Nossa história</div>
+      <h2 class="section-title reveal reveal-delay-1">Tradição e inovação<br>em cada detalhe</h2>
+      <p class="section-subtitle reveal reveal-delay-2">
+        A Terra Marcenaria nasceu da paixão pela marcenaria artesanal. Combinamos técnicas tradicionais com tecnologia moderna para criar móveis únicos que transformam ambientes.
+      </p>
+      <div class="sobre-features">
+        <div class="feature-item reveal reveal-delay-1">
+          <div class="feature-icon">🌳</div>
+          <div class="feature-text">
+            <h4>Madeiras selecionadas</h4>
+            <p>Trabalhamos apenas com madeiras de reflorestamento certificadas, garantindo beleza e responsabilidade ambiental.</p>
+          </div>
+        </div>
+        <div class="feature-item reveal reveal-delay-2">
+          <div class="feature-icon">✏️</div>
+          <div class="feature-text">
+            <h4>Design personalizado</h4>
+            <p>Cada projeto é desenhado do zero para o seu espaço, respeitando medidas, estilo de vida e preferências do cliente.</p>
+          </div>
+        </div>
+        <div class="feature-item reveal reveal-delay-3">
+          <div class="feature-icon">🛡️</div>
+          <div class="feature-text">
+            <h4>Garantia estendida</h4>
+            <p>Todos os nossos móveis possuem garantia de 5 anos em estrutura e 2 anos em acabamento.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <div class="servicos-header">
+    <div>
+      <div class="section-label reveal">O que fazemos</div>
+      <h2 class="section-title reveal reveal-delay-1" style="color:var(--cream)">Nossos serviços</h2>
+    </div>
+  </div>
+  <div class="servicos-grid">
+    <div class="servico-card reveal">
+      <span class="servico-num">01</span>
+      <span class="servico-icon">🛏️</span>
+      <h3>Quartos Planejados</h3>
+      <p>Armários, cabeceiras, criados-mudos e gaveteiros personalizados para otimizar cada centímetro do seu dormitório.</p>
+      <a href="#orcamento" class="servico-link">Solicitar → </a>
+    </div>
+    <div class="servico-card reveal reveal-delay-1">
+      <span class="servico-num">02</span>
+      <span class="servico-icon">🍳</span>
+      <h3>Cozinhas Planejadas</h3>
+      <p>Projetos funcionais e elegantes com armários superiores, inferiores e ilhas adaptados ao seu estilo de cozinhar.</p>
+      <a href="#orcamento" class="servico-link">Solicitar → </a>
+    </div>
+    <div class="servico-card reveal reveal-delay-2">
+      <span class="servico-num">03</span>
+      <span class="servico-icon">📚</span>
+      <h3>Home Office</h3>
+      <p>Ambientes de trabalho produtivos com mesas, estantes e organizadores pensados para o seu fluxo de trabalho.</p>
+      <a href="#orcamento" class="servico-link">Solicitar → </a>
+    </div>
+    <div class="servico-card reveal">
+      <span class="servico-num">04</span>
+      <span class="servico-icon">🛋️</span>
+      <h3>Salas de Estar</h3>
+      <p>Estantes, painéis para TV, mesas de centro e aparadores que harmonizam estética e funcionalidade.</p>
+      <a href="#orcamento" class="servico-link">Solicitar → </a>
+    </div>
+    <div class="servico-card reveal reveal-delay-1">
+      <span class="servico-num">05</span>
+      <span class="servico-icon">🚪</span>
+      <h3>Banheiros e Lavabos</h3>
+      <p>Gabinetes, nichos e armários especialmente tratados para alta umidade com acabamento premium.</p>
+      <a href="#orcamento" class="servico-link">Solicitar → </a>
+    </div>
+    <div class="servico-card reveal reveal-delay-2">
+      <span class="servico-num">06</span>
+      <span class="servico-icon">🏢</span>
+      <h3>Ambientes Comerciais</h3>
+      <p>Recepções, escritórios e lojas com mobiliário corporativo que reforça a identidade da sua marca.</p>
+      <a href="#orcamento" class="servico-link">Solicitar → </a>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFÓLIO -->
+<section id="portfolio">
+  <div class="portfolio-header">
+    <div class="section-label reveal" style="justify-content:center">Nossos trabalhos</div>
+    <h2 class="section-title reveal reveal-delay-1">Portfólio de projetos</h2>
+    <p class="section-subtitle reveal reveal-delay-2" style="margin:0 auto; text-align:center">Cada projeto conta uma história única. Veja alguns dos nossos trabalhos mais recentes.</p>
+  </div>
+
+  <div class="portfolio-tabs">
+    <button class="tab-btn active" onclick="filterPortfolio(this, 'todos')">Todos</button>
+    <button class="tab-btn" onclick="filterPortfolio(this, 'cozinha')">Cozinhas</button>
+    <button class="tab-btn" onclick="filterPortfolio(this, 'quarto')">Quartos</button>
+    <button class="tab-btn" onclick="filterPortfolio(this, 'sala')">Salas</button>
+    <button class="tab-btn" onclick="filterPortfolio(this, 'office')">Home Office</button>
+  </div>
+
+  <div class="portfolio-grid" id="portfolioGrid">
+    <div class="portfolio-item reveal" data-cat="cozinha">
+      <div class="portfolio-img">🍳</div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-info">
+          <h4>Cozinha Contemporânea</h4>
+          <p>Residencial · São Paulo</p>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-item reveal reveal-delay-1" data-cat="quarto">
+      <div class="portfolio-img">🛏️</div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-info">
+          <h4>Suíte Master</h4>
+          <p>Residencial · Campinas</p>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-item reveal reveal-delay-2" data-cat="sala">
+      <div class="portfolio-img">🛋️</div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-info">
+          <h4>Sala Integrada</h4>
+          <p>Residencial · São Paulo</p>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-item reveal reveal-delay-1" data-cat="office">
+      <div class="portfolio-img">💼</div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-info">
+          <h4>Home Office Premium</h4>
+          <p>Residencial · Jundiaí</p>
+        </div>
+      </div>
+    </div>
+    <div class="portfolio-item reveal reveal-delay-2" data-cat="cozinha">
+      <div class="portfolio-img">🥘</div>
+      <div class="portfolio-overlay">
+        <div class="portfolio-info">
+          <h4>Cozinha Rústica</h4>
+          <p>Residencial · Atibaia</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORÇAMENTO -->
+<section id="orcamento">
+  <div class="orcamento-wrapper">
+    <div class="orcamento-info">
+      <div class="section-label reveal">É grátis</div>
+      <h2 class="section-title reveal reveal-delay-1">Solicite seu orçamento sem compromisso</h2>
+      <p class="section-subtitle reveal reveal-delay-2">Nossa equipe entra em contato em até 24 horas para agendar uma visita técnica gratuita.</p>
+
+      <div class="process-steps">
+        <div class="step reveal reveal-delay-1">
+          <div class="step-num">1</div>
+          <div class="step-text">
+            <h4>Preencha o formulário</h4>
+            <p>Conte-nos sobre seu projeto e necessidades.</p>
+          </div>
+        </div>
+        <div class="step reveal reveal-delay-2">
+          <div class="step-num">2</div>
+          <div class="step-text">
+            <h4>Visita técnica</h4>
+            <p>Nosso designer vai até seu espaço gratuitamente.</p>
+          </div>
+        </div>
+        <div class="step reveal reveal-delay-3">
+          <div class="step-num">3</div>
+          <div class="step-text">
+            <h4>Proposta personalizada</h4>
+            <p>Receba um projeto 3D detalhado com valores.</p>
+          </div>
+        </div>
+        <div class="step reveal">
+          <div class="step-num">4</div>
+          <div class="step-text">
+            <h4>Produção e entrega</h4>
+            <p>Acompanhe cada etapa até a instalação final.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="orcamento-form reveal reveal-delay-2">
+      <h3 class="form-title">Iniciar projeto</h3>
+      <p class="form-subtitle">Preencha os dados abaixo e nossa equipe entrará em contato</p>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nome completo</label>
+          <input type="text" placeholder="Seu nome">
+        </div>
+        <div class="form-group">
+          <label>Telefone / WhatsApp</label>
+          <input type="tel" placeholder="(00) 00000-0000" id="phone">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>E-mail</label>
+        <input type="email" placeholder="seu@email.com">
+      </div>
+
+      <div class="form-group">
+        <label>Tipo de ambiente</label>
+        <select>
+          <option value="">Selecione o ambiente</option>
+          <option>Cozinha planejada</option>
+          <option>Quarto / suíte</option>
+          <option>Sala de estar</option>
+          <option>Home office</option>
+          <option>Banheiro / lavabo</option>
+          <option>Ambiente comercial</option>
+          <option>Vários ambientes</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Metragem aproximada</label>
+        <select>
+          <option value="">Selecione a metragem</option>
+          <option>Até 10 m²</option>
+          <option>10 a 20 m²</option>
+          <option>20 a 40 m²</option>
+          <option>Acima de 40 m²</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Descrição do projeto (opcional)</label>
+        <textarea placeholder="Conte-nos mais sobre sua ideia, estilo preferido, cores..."></textarea>
+      </div>
+
+      <button class="form-submit" onclick="submitForm(this)">Solicitar orçamento gratuito</button>
+    </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section id="depoimentos">
+  <div class="dep-header">
+    <div class="section-label reveal" style="justify-content:center">Quem nos escolheu</div>
+    <h2 class="section-title reveal reveal-delay-1">O que nossos clientes dizem</h2>
+  </div>
+
+  <div class="dep-grid">
+    <div class="dep-card reveal">
+      <div class="dep-stars">★★★★★</div>
+      <p class="dep-text">"A cozinha ficou exatamente como eu sonhei. O atendimento foi impecável do começo ao fim. Recomendo sem hesitar!"</p>
+      <div class="dep-author">
+        <div class="dep-avatar">M</div>
+        <div>
+          <div class="dep-name">Marina Souza</div>
+          <div class="dep-role">Arquiteta, São Paulo</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dep-card reveal reveal-delay-1">
+      <div class="dep-stars">★★★★★</div>
+      <p class="dep-text">"Transformaram meu home office em um espaço incrível. A qualidade dos acabamentos supera qualquer expectativa. Valeu cada centavo."</p>
+      <div class="dep-author">
+        <div class="dep-avatar">R</div>
+        <div>
+          <div class="dep-name">Rafael Mendes</div>
+          <div class="dep-role">Empreendedor, Campinas</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dep-card reveal reveal-delay-2">
+      <div class="dep-stars">★★★★★</div>
+      <p class="dep-text">"Já é o terceiro projeto que faço com a Artesão. Profissionalismo, prazo cumprido e resultado sempre acima do esperado."</p>
+      <div class="dep-author">
+        <div class="dep-avatar">C</div>
+        <div>
+          <div class="dep-name">Carla Fiuza</div>
+          <div class="dep-role">Designer de Interiores</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="contato-inner">
+    <div class="contato-content">
+      <div class="section-label reveal">Fale conosco</div>
+      <h2 class="contato-title reveal reveal-delay-1">Vamos criar algo<br><em style="color:var(--gold);font-style:italic">extraordinário</em><br>juntos?</h2>
+      <p class="contato-desc reveal reveal-delay-2">
+        Nossa equipe está pronta para ouvir sua ideia e transformá-la em realidade. Entre em contato e comece hoje mesmo.
+      </p>
+
+      <div class="contato-items">
+        <div class="contato-item reveal reveal-delay-1">
+          <div class="contato-item-icon">📱</div>
+          <div class="contato-item-text">
+            <span class="l">WhatsApp</span>
+            <span class="v">(11) 99999-0000</span>
+          </div>
+        </div>
+        <div class="contato-item reveal reveal-delay-2">
+          <div class="contato-item-icon">✉️</div>
+          <div class="contato-item-text">
+            <span class="l">E-mail</span>
+            <span class="v">contato@artesaomadeiras.com.br</span>
+          </div>
+        </div>
+        <div class="contato-item reveal reveal-delay-3">
+          <div class="contato-item-icon">📍</div>
+          <div class="contato-item-text">
+            <span class="l">Endereço</span>
+            <span class="v">Rua das Artes, 450 — São Paulo, SP</span>
+          </div>
+        </div>
+        <div class="contato-item reveal">
+          <div class="contato-item-icon">🕐</div>
+          <div class="contato-item-text">
+            <span class="l">Horário</span>
+            <span class="v">Seg–Sex: 8h–18h | Sáb: 8h–13h</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contato-map reveal reveal-delay-2">
+      <div class="map-pin">📍</div>
+      <p class="map-text">Rua das Artes, 450<br>Móoca, São Paulo — SP<br><br><a href="#" style="color:var(--gold); text-decoration:none; font-size:0.8rem; letter-spacing:0.1em; text-transform:uppercase;">Ver no mapa →</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Terra Marcenaria</div>
+  <p class="footer-copy">© 2025 Terra Marcenaria. Todos os direitos reservados.</p>
+  <ul class="footer-links">
+    <li><a href="#">Política de privacidade</a></li>
+    <li><a href="#">Termos de uso</a></li>
+    <li><a href="#orcamento">Orçamento</a></li>
+  </ul>
+</footer>
+
+<!-- WHATSAPP -->
+<a href="https://wa.me/5511999990000" class="whatsapp-btn" target="_blank" title="Chamar no WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+  </svg>
+</a>
+
+<script>
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Portfolio filter
+  function filterPortfolio(btn, cat) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const items = document.querySelectorAll('.portfolio-item');
+    items.forEach(item => {
+      const match = cat === 'todos' || item.dataset.cat === cat;
+      item.style.transition = 'opacity 0.35s, transform 0.35s';
+      item.style.opacity = match ? '1' : '0.2';
+      item.style.transform = match ? 'scale(1)' : 'scale(0.95)';
+      item.style.pointerEvents = match ? 'auto' : 'none';
+    });
+  }
+
+  // Phone mask
+  const phone = document.getElementById('phone');
+  if (phone) {
+    phone.addEventListener('input', function() {
+      let v = this.value.replace(/\D/g, '');
+      if (v.length > 11) v = v.slice(0, 11);
+      if (v.length > 6) v = `(${v.slice(0,2)}) ${v.slice(2,7)}-${v.slice(7)}`;
+      else if (v.length > 2) v = `(${v.slice(0,2)}) ${v.slice(2)}`;
+      else if (v.length > 0) v = `(${v}`;
+      this.value = v;
+    });
+  }
+
+  // Form submit
+  function submitForm(btn) {
+    const original = btn.textContent;
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+    btn.style.background = 'var(--wood-mid)';
+
+    setTimeout(() => {
+      btn.textContent = '✓ Solicitação enviada!';
+      btn.style.background = '#2d8a4e';
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.disabled = false;
+        btn.style.background = '';
+      }, 3500);
+    }, 1500);
+  }
+</script>
+</body>
+</html>
